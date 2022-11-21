@@ -1,0 +1,6 @@
+- Team 1 - Swappy
+- Participants: 
+    - Omar Hegazy
+    - Ammar Afridi
+    - Ahmed Elsherif
+Write a brief description about your project.
