@@ -4,13 +4,14 @@ import TextField from '@mui/material/TextField';
 
 let registerStyle = {
     "box-shadow": "0px 0px 17px 12px lightgray",
+    "background-color":"white"
 }
 
 function RegistrationScreen(){
     return(
         <section className="mx-auto padding-y-4">
 
-            <form method="post" className="col-lg-10 mx-auto px-5 padding-y-5" style={registerStyle}>
+            <form className="col-lg-10 mx-auto px-5 padding-y-5" style={registerStyle}>
 
                 <h1 className="text-center margin-bottom-4">Register Here</h1>
 
@@ -44,15 +45,6 @@ function RegistrationScreen(){
                         <label for="password">Password</label>
                         <input className="input-underline" type="password" name="password" id="password" />
                     </div>
-
-                    <div className="col-lg">
-                        <label for="city">Residence City</label>
-                        <input className="input-underline" type="text" name="city" id="city" />
-                    </div>
-
-                </div>
-
-                <div className="row margin-bottom-2">
 
                     <div className="col-lg-4">
                         <label for="firstName">Avatar</label>

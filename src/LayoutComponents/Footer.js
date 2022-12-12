@@ -26,8 +26,8 @@ function Footer(){
 
                 <div className="col-lg-2 footer-section">
                     <h5 className="margin-bottom-2">Customer Service</h5>
-                    <a href="/" className="footer-link font-14">About Us</a>
-                    <a href="/" className="footer-link font-14">Contact</a>
+                    <a href="/about" className="footer-link font-14">About Us</a>
+                    <a href="/contact" className="footer-link font-14">Contact</a>
                     <a href="/" className="footer-link font-14">Request A Return</a>
                     <a href="/" className="footer-link font-14">Terms & Conditions</a>
                     <a href="/" className="footer-link font-14">Return Policy</a>

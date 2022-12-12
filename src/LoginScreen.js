@@ -2,6 +2,7 @@ function LoginScreen(){
 
     let loginStyle = {
         "box-shadow": "0px 0px 17px 12px lightgray",
+        "background-color":"white"
     }
 
     let btnStyle = {
@@ -13,7 +14,7 @@ function LoginScreen(){
 
             <section className="col-lg-10 mx-auto margin-y-3">
 
-                <form method="get" className="col-lg-5 mx-auto px-5 padding-y-5" style={loginStyle}>
+                <form className="col-lg-5 mx-auto px-5 padding-y-5" style={loginStyle}>
 
                         <h1 className="text-center margin-bottom-3">Login</h1>
 

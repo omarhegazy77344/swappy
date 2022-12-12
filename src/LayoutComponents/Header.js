@@ -1,3 +1,5 @@
+import UserAvatar from "../UserScreenComponents/UserAvatar";
+
 function Header(){
 
     let row2Styling = {
@@ -12,10 +14,10 @@ function Header(){
     return(
         <div>
 
-            <section className="navigation col-lg-12">
+            <section className="navigation">
 
                 {/* Row 1 */}
-                <div className="row col-lg-10 col-md-10 mx-auto text-center padding-y-1 justify-content-center">
+                <div className="row col-lg-10 col-md-10 mx-auto padding-y-1 justify-content-between">
 
                     {/* Logo */}
                     <div className="col-lg-2 col-md-2 my-auto">
@@ -40,8 +42,8 @@ function Header(){
                             <button className="btn btn-primary box-shadow" style={btnWidth}>Create Ad</button>
                         </div>
                         <div className="col-lg-2 my-auto text-end">
-                            <a title="Account" href="/login"className="text-end">
-                                <i className="fa-solid fa-circle-user navigation-user-icon text-end primary-icon font-25 m-auto"></i>
+                            <a title="Account" href="/login" className="text-end">
+                                <UserAvatar />
                             </a>
                         </div>
                     </div>
@@ -50,9 +52,9 @@ function Header(){
 
 
                 {/* Row 2 */}
-                <div className="col-lg-10 col-md-10 mx-auto py-2 row justify-content-center" style={row2Styling}>
+                <div className="col-lg-10 col-md-10 mx-auto py-2 row justify-content-between" style={row2Styling}>
                     <div className="col-lg col-md">
-                        <a href="/" className="nav-link">Living Room</a>
+                        <a href="/product-listing" className="nav-link">Living Room</a>
                     </div>
                     <div className="col-lg col-md">
                         <a href="/" className="nav-link">Bedroom</a>

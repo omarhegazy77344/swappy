@@ -3,6 +3,8 @@ import HomeScreen from "./HomeScreen";
 import AboutScreen from "./AboutScreen";
 import RegistrationScreen from "./RegistrationScreen";
 import LoginScreen from "./LoginScreen";
+import UserScreen from "./UserScreenComponents/UserScreen";
+import ProductListing from "./ProductListing";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -13,6 +15,8 @@ function App() {
         <LayoutRoute path="/about" exact={true} component={AboutScreen} />
         <LayoutRoute path="/login" exact={true} component={LoginScreen} />
         <LayoutRoute path="/registration" exact={true} component={RegistrationScreen} />
+        <LayoutRoute path="/product-listing" exact={true} component={ProductListing} />
+        <LayoutRoute path="/user" exact={true} component={UserScreen} />
       </Switch>
     </BrowserRouter>
   );
