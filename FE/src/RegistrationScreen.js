@@ -1,83 +1,264 @@
-import * as React from 'react';
+import { useState } from 'react';
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-let registerStyle = {
-    "box-shadow": "0px 0px 17px 12px lightgray",
-}
 
-function RegistrationScreen(){
 
-    return(
-        <section className="mx-auto padding-y-4">
+function RegistrationScreen() {
 
-            <form method="post" className="col-lg-10 mx-auto px-5 padding-y-5" style={registerStyle}>
+    // The states are: 
+    // (1) null, (2) "client error", (3) "loading", (4) "backend error", (5) "success"
+    var [formState, setFormState] = useState(null);
+    var [errorsState, setErrorsState] = useState([]);
 
-                <h1 className="text-center margin-bottom-4">Register Here</h1>
 
-                <div className="row margin-bottom-2">
+    // 1. Declare variables (not defined)
+    var firstNameField;
+    var lastNameField;
+    var emailField;
+    var passwordField;
+    var avatarField;
 
-                    <div className="col-lg">
-                        <label for="firstName">First Name</label>
-                        <input className="input-underline" type="text" name="firstName" id="firstName" />
-                    </div>
+     
+    // Create a JS object like an HTML form element 
+    var formData = new FormData();
 
-                    <div className="col-lg">
-                        <label for="lastName">Last Name</label>
-                        <input className="input-underline" type="text" name="lastName" id="lastName" />
-                    </div>
+    function attachFile(evt) {
 
-                    <div className="col-lg">
-                        <label for="email">Email Address</label>
-                        <input className="input-underline" type="email" name="email" id="email" />
-                    </div>
+        console.log('file data', evt.target.files)
+        // Creating an array from the files attached by user
+        var files = Array.from(evt.target.files);
 
-                </div>
+        files.forEach(
+            function(fileAttachment, index) {
+                formData.append(index, fileAttachment);
+            }
+        )
+    }
 
-                <div className="row margin-bottom-2">
 
-                    <div className="col-lg">
-                        <label for="phone">Phone Number</label>
-                        <input className="input-underline" type="text" name="phone" id="phone" />
-                    </div>
 
-                    <div className="col-lg">
-                        <label for="password">Password</label>
-                        <input className="input-underline" type="password" name="password" id="password" />
-                    </div>
 
-                    <div className="col-lg">
-                        <label for="city">Residence City</label>
-                        <input className="input-underline" type="text" name="city" id="city" />
-                    </div>
 
-                </div>
 
-                <div className="row margin-bottom-2">
 
-                    <div className="col-lg-4">
-                        <label for="firstName">Avatar</label>
-                        <input type="file" name="firstName" id="firstName" />
-                    </div>
+    function register() {
 
-                </div>
 
-                <div className="row margin-bottom-2">
+        // 2. Validate the fields
+        var errors = [];
 
-                    <div className="col-lg-4">
-                        <input type="checkbox" name="firstName" id="firstName" />
-                        <label class="ms-3" for="firstName"> I agree to the Terms & Conditions</label>
-                    </div>
+        if(firstNameField.value.length === 0) {
+            errors.push('Please enter your first name');
+        }
 
-                </div>
+        if(lastNameField.value.length === 0) {
+            errors.push('Please enter your last name');
+        }
 
-                <div className="col-lg-3 row mx-auto">
-                        <button className="btn btn-primary">Sign Up</button>
-                </div>
+        if(emailField.value.length === 0) {
+            errors.push('Please enter your email');
+        }
 
-            </form>
-        </section>
+        if(passwordField.value.length === 0) {
+            errors.push('Please enter your password');
+        }
+
+        // 3. If any field is not validated, go to "client error"
+        if( errors.length > 0 ) {
+            setFormState("client error");
+            setErrorsState( errors );
+        }
+
+        // 4. If all fields are valid
+        else {
+            // 5. Go to "loading"
+            setFormState("loading");
+            setErrorsState([]);
+
+            // 6. Send data backend
+            formData.append('firstName', firstNameField.value);
+            formData.append('lastName', lastNameField.value);
+            formData.append('email', emailField.value);
+            formData.append('password', passwordField.value);
+
+            fetch(
+                `${process.env.REACT_APP_BACKEND_ENDPOINT}/users/register`,
+                {
+                    'method': 'POST',
+                    'body': formData
+                }
+            )
+            .then(
+                function(backendResponse) {
+                    // Convert the HTTP string response to JSON
+                    return backendResponse.json();
+                }
+            )
+            .then(
+                // 7. If backend sends success, go to "success"
+                function(jsonResponse) {
+                    if(jsonResponse.status === "ok") {
+                        console.log('backend response /users/register', jsonResponse)
+                        setFormState("success");
+                    }
+                    else {
+                        setFormState("backend error");
+                        setErrorsState([jsonResponse.message]);
+                    }
+                }
+            )
+            .catch(
+                // 8. If backends sends error, go to "backend error"
+                function(backendError) {
+                    console.log('backendError at /users/register', backendError)
+                    setFormState("backend error");
+                }
+            )
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    function addListItem(str) {
+        return <li>{str}</li>
+    }
+
+    return (
+        
+        <Container maxWidth="sm">
+            <Box pt={8}>
+                <Typography component="h1" variant="h2">
+                    Registration
+                </Typography>
+            </Box>
+
+            <Box mt={4} mb={2}>
+                <FormControl fullWidth sx={ { mb: 2 } }>
+                    <TextField 
+                    inputRef={ 
+                        function( thisElement ){
+                            firstNameField = thisElement;
+                        } 
+                    }
+                    label="Firstname" required={true}/>
+                </FormControl>
+
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                   <TextField 
+                   inputRef={ 
+                        function( thisElement ){
+                            lastNameField = thisElement;
+                        } 
+                    }
+                   label="Lastname" required={true}/>
+                </FormControl>
+
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                    <TextField 
+                    inputRef={ 
+                        function( thisElement ){
+                            emailField = thisElement;
+                        } 
+                    }
+                    label="Email" required={true}/>
+                </FormControl>
+
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                    <TextField 
+                    inputRef={ 
+                        function( thisElement ){
+                            passwordField = thisElement;
+                        } 
+                    }
+                    type="password"
+                    label="Password" required={true} />
+                </FormControl>
+            </Box>
+
+            <Box mt={4} mb={4}>
+
+                <Typography component="p" variant="body1" gutterBottom>
+                    Upload your profile picture (optional)
+                </Typography>
+
+                <br/>
+
+                <Button size="small" component="label" variant="contained" >
+                    Upload
+                    <input 
+                        ref={function(thisElement){ avatarField = thisElement }} 
+                        onClick={attachFile}
+                        onChange={attachFile}
+                        hidden accept="image/*" 
+                        multiple type="file" 
+                    />
+                </Button>
+
+            </Box>
+
+            <Box display="flex">
+                
+                {
+                    formState !== "loading" &&
+                    <Button onClick={register} size="large" variant="contained">Send</Button>
+                }
+                
+                {
+                    formState === "loading" &&
+                    <CircularProgress />
+                }
+            </Box>
+
+            <Box mt={2}>
+
+                { 
+                    formState === "client error" &&
+                    <Alert severity="error">
+                        <ul>
+                        {
+                            errorsState.map(addListItem)
+                        }
+                        </ul>
+                    </Alert>
+                }
+
+                { 
+                    formState === "backend error" &&
+                    <Alert severity="error">
+                        <ul>
+                        {
+                            errorsState.map(addListItem)
+                        }
+                        </ul>
+                    </Alert>
+                }
+
+                {
+                    formState === "success" &&
+                    <Alert severity="success">
+                        You have registered successfully!
+                    </Alert>
+                }
+            </Box>
+
+        </Container>
+        
     )
+
 }
 
-export default RegistrationScreen
+export default RegistrationScreen;

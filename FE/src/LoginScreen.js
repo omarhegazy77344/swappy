@@ -1,54 +1,189 @@
-function LoginScreen(){
+import { useState, useContext } from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { UserContext } from './UserContext.js';
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-    let loginStyle = {
-        "box-shadow": "0px 0px 17px 12px lightgray",
+
+function LoginScreen() {
+
+    // The states are: 
+    // (1) null, (2) "client error", (3) "backend error", (4) "loading", (5) "success"
+
+    var [formState, setFormState] = useState(null);
+    var [errorsState, setErrorsState] = useState([]);
+    var { loggedIn, updateUser } = useContext(UserContext);
+
+
+    // 1. Declare variables (not defined)
+    var emailField;
+    var passwordField;
+
+     
+    // Create a JS object like an HTML form element 
+    var formData = new FormData();
+
+    function login() {
+
+
+        // 2. Validate the fields
+        var errors = [];
+
+        if(emailField.value.length === 0) {
+            errors.push('Please enter your email');
+        }
+
+        if(passwordField.value.length === 0) {
+            errors.push('Please enter your password');
+        }
+
+        // 3. If any field is not validated, go to "client error"
+        if( errors.length > 0 ) {
+            setFormState("client error");
+            setErrorsState( errors );
+        }
+
+        // 4. If all fields are valid
+        else {
+            // 5. Go to "loading"
+            setFormState("loading");
+            setErrorsState([]);
+
+            // 6. Send data backend
+            formData.append('email', emailField.value);
+            formData.append('password', passwordField.value);
+
+            fetch(
+                `${process.env.REACT_APP_BACKEND_ENDPOINT}/users/login`,
+                {
+                    'method': 'POST',
+                    'body': formData
+                }
+            )
+            .then(
+                function(backendResponse) {
+                    // Convert the HTTP string response to JSON
+                    return backendResponse.json();
+                }
+            )
+            .then(
+                // 7. If backend sends success, go to "success"
+                function(jsonResponse) {
+                    if(jsonResponse.status === "ok") {
+                        console.log('backend response /users/login', jsonResponse)
+                        setFormState("success");
+
+                        // Update the user context
+                        updateUser(
+                            {
+                                "email": jsonResponse.message.email,
+                                "firstName": jsonResponse.message.firstName,
+                                "lastName": jsonResponse.message.lastName,
+                                "avatar": jsonResponse.message.avatar,
+                                "jsonwebtoken": jsonResponse.message.jsonwebtoken,
+                                "loggedIn": true
+                            }
+                        )
+                    }
+                    else {
+                        setFormState("backend error");
+                    }
+                }
+            )
+            .catch(
+                // 8. If backends sends error, go to "backend error"
+                function(backendError) {
+                    console.log('backendError at /users/login', backendError)
+                    setFormState("backend error");
+                }
+            )
+        }
     }
 
-    let btnStyle = {
-        "width":"100%"
+    function addListItem(str) {
+        return <li>{str}</li>
     }
 
-    return(
-        <div>
+    if(formState === "success") {
+        return (
+            <Redirect to="/" />
+        )
+    }
+    else {
+        return (
+            <Container maxWidth="sm">
+                <Box pt={8}>
+                    <Typography component="h1" variant="h2">
+                        Login
+                    </Typography>
+                </Box>
 
-            <section className="col-lg-10 mx-auto margin-y-3">
+                <Box mt={4} mb={2}>
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                        <TextField 
+                        inputRef={ 
+                            function( thisElement ){
+                                emailField = thisElement;
+                            } 
+                        }
+                        label="Email" required={true}/>
+                    </FormControl>
 
-                <form method="get" className="col-lg-5 mx-auto px-5 padding-y-5" style={loginStyle}>
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                        <TextField 
+                        inputRef={ 
+                            function( thisElement ){
+                                passwordField = thisElement;
+                            } 
+                        }
+                        type="password"
+                        label="Password" required={true} />
+                    </FormControl>
+                </Box>
 
-                        <h1 className="text-center margin-bottom-3">Login</h1>
+                <Box display="flex">
+                    
+                    {
+                        formState !== "loading" &&
+                        <Button onClick={login} size="large" variant="contained">Send</Button>
+                    }
+                    
+                    {
+                        formState === "loading" &&
+                        <CircularProgress />
+                    }
+                </Box>
 
-                        <div className="margin-bottom-2">
-                            <label for="email">Email Address</label>
-                            <input className="input-underline" type="email" name="email" id="email" />
-                        </div>
+                <Box mt={2}>
 
-                        <div className="margin-bottom-2">
-                            <label for="password">Password</label>
-                            <input className="input-underline" type="password" name="password" id="password" />
-                        </div>
+                    { 
+                        formState === "client error" &&
+                        <Alert severity="error">
+                            <ul>
+                            {
+                                errorsState.map(addListItem)
+                            }
+                            </ul>
+                        </Alert>
+                    }
 
-                        <div className="margin-bottom-2">
-                            <p className="font-12">By logging in, you agree to our Terms & Conditions.</p>
-                        </div>
+                    {
+                        formState === "success" &&
+                        <Alert severity="success">
+                            You have logged in successfully!
+                        </Alert>
+                    }
+                </Box>
+            </Container>
+        )
+    }
 
-                        <div className="col-lg-6 mx-auto margin-bottom-1">
-                            <button className="btn btn-primary" type="submit" style={btnStyle}>Login</button>
-                        </div>
-
-                        <hr />
-
-                </form>
-
-            </section>
-
-            <hr className="col-lg-6 mx-auto"/>
-
-            <section class="col-lg-10 mx-auto text-center margin-y-3">
-                <h2>New User? <strong><a href="/registration">Sign Up</a></strong></h2>
-            </section>
-
-        </div>
-    )
 }
 
-export default LoginScreen
+export default LoginScreen;

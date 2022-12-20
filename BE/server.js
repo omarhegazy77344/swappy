@@ -92,13 +92,6 @@ cloudinary.config(
  * PassportJS Integration
  */
 
-
-
-
-
-
-
-
 const dbConfig = {
     'useNewUrlParser': true,
     'useUnifiedTopology': true

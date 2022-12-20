@@ -9,7 +9,6 @@ function HomeScreen() {
         <div>
             <Hero/>       
             <Features />
-            <Testimonials />
         </div>
     )
 }

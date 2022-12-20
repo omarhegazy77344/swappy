@@ -68,6 +68,9 @@ router.post( '/register',
                     )
                 };
 
+
+
+
                 // If email is unique...
                 if(!dbDocument) {
            
@@ -160,6 +163,7 @@ router.post('/login',
         const formData = {
             email: req.body.email,
             password: req.body.password,
+            avatar:req.body.avatar,
         }
 
         // Check if email exists
@@ -263,7 +267,8 @@ router.post('/find',
     passport.authenticate('jwt', {session: false}),
     function(req, res) {
         UserModel
-        .findById(req.user.id)
+       .findById(req.user.id)
+      // .find(req.user)
         .then(
             function(dbDocument) {
                 res.json(dbDocument)
@@ -283,9 +288,8 @@ router.post('/find',
 
 
 // http://localhost:3001/users/update
-router.put(
-    '/update',
-    // passport.authenticate('jwt', {session: false}),
+router.put('/update',
+    passport.authenticate('jwt', {session: false}),
     function(req, res) {
 
         let updates = {}
@@ -296,14 +300,15 @@ router.put(
         if (req.body.lastName) {
             updates['lastName'] = req.body.lastName;
         };
-        if (req.body.phone) {
-            updates['phone'] = req.body.phone;
-        };
+        
+       
+
+        
 
         UserModel
         .findOneAndUpdate(
             {
-                "email": req.body.email
+                email: req.user.email
             },
             {
                 $set: updates
@@ -313,8 +318,11 @@ router.put(
             }
         )
         .then(
+           
             function(dbDocument) {
+            
                 res.json(dbDocument)
+
             }
         )
         .catch(

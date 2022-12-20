@@ -1,97 +1,170 @@
-function Header(){
+import * as React from 'react';
+import{Link as ReactLink} from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import { MenuItem } from '@mui/material';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { UserContext } from '../UserContext';
 
-    let row2Styling = {
-        "border-top":"1px solid lightgray",
-        "border-bottom":"1px solid lightgray"
-    }
+const theme = createTheme({
+    palette: {
+      primary: {
+        // Purple and green play nicely together.
+        main: '#222831',
+      },
+      Secondary: {
+        // This is green.A700 as hex.
+        main: '#222831',
+      },
+    },
+  });
 
-    let btnWidth = {
-        "width":"100%"
-    }
+const pages = ['Home', 'About', 'Buy', 'Sell'];
+const settings = ['Profile', 'login'];
+const pagespaths=['/','/about','/buy','/sell']
+const settingpaths=['/profile','/login']
 
-    return(
-        <div>
+function ResponsiveAppBar() {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { loggedIn, avatar ,logoutUser } = React.useContext(UserContext)
 
-            <section className="navigation col-lg-12">
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
-                {/* Row 1 */}
-                <div className="row col-lg-10 col-md-10 mx-auto text-center padding-y-1 justify-content-center">
-                    {/* Logo */}
-                    <div className="col-lg-2 col-md-2 my-auto">
-                        <a href="/">
-                            <img src="/images/logo.png" className="navigation-logo my-auto" alt="logo"/>
-                        </a>
-                    </div>
-                    {/* CTA and Login */}
-                    <div className="col-lg-2 my-auto text-end">
-                        <a title="Account" href="/login"className="text-end">
-                            <i className="fa-solid fa-circle-user navigation-user-icon text-end primary-icon font-25 m-auto"></i>
-                        </a>
-                    </div>
-                </div>
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
-                {/* Row 2 */}
-                <div className="col-lg-10 col-md-10 mx-auto py-2 row justify-content-center" style={row2Styling}>
-                    <div className="col-lg col-md">
-                        <a href="/" className="nav-link">Living Room</a>
-                    </div>
-                    <div className="col-lg col-md">
-                        <a href="/" className="nav-link">Bedroom</a>
-                    </div>
-                    <div className="col-lg col-md">
-                        <a href="/" className="nav-link">Dining Room</a>
-                    </div>
-                    <div className="col-lg col-md"> 
-                        <a href="/" className="nav-link">Office</a>
-                    </div>
-                    <div className="col-lg col-md"> 
-                        <a href="/" className="nav-link">Outdoor</a>
-                    </div>
-                    <div className="col-lg col-md"> 
-                        <a href="/" className="nav-link">Bathroom</a>
-                    </div>
-                </div>
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
-            </section>
+  return (
+    <ThemeProvider theme={theme}>
+    <AppBar position="static"  color="Secondary">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
 
-            {/* Mobile Navigation */}
+         <div className="col-lg-2 col-md-1 my-auto">
+        <ReactLink to="/">
+        <img src="images/footer-logo.png" className="navigation-logo my-auto" alt="logo"/>
+        </ReactLink>
+         </div>  
 
-            <section class="col-12 mobile-navigation padding-y-1 m-auto">
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
 
-                <div class="row col-11 m-auto">
+          <Box sx={{ flexGrow: 1, display: { xs:'none', md: 'flex' } }}>
+            {pages.map((page,i) => (
+              <Button
+              
+                component={ReactLink}
+                to={pagespaths[i]}
+                key={page}
+                sx={{ mx: 1, my: 1, color: 'white', display: 'block' }}
+              >
+                {page}
+              </Button>
+            ))}
+          </Box>
 
-                    <div class="col my-auto">
-                    
-                        <i class="fa-solid fa-bars mobile-menu-icon" data-bs-toggle="offcanvas" data-bs-target="#demo"></i>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt="O" src= {avatar} />
+              </IconButton>
+            </Tooltip>
 
-                        <div class="offcanvas offcanvas-start" id="demo">
-                            <div class="offcanvas-header text-end">
-                            </div>
-                            <div class="offcanvas-body">
-                                <a href="/" class="nav-link mobile-nav-link font-25">Living Room</a>
-                                <a href="/" class="nav-link mobile-nav-link font-25">Bedroom</a>
-                                <a href="/" class="nav-link mobile-nav-link font-25">Kitchen</a>
-                                <a href="/" class="nav-link mobile-nav-link font-25">Dining Room</a>
-                                <a href="/" class="nav-link mobile-nav-link font-25">Outdoor</a>
-                                <a href="/" class="nav-link mobile-nav-link font-25">Bathroom</a>
-                            </div>
-                        </div>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting,i) => (
+                <MenuItem key={setting} component={ReactLink}
+                to={settingpaths[i]}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+               {
+                loggedIn ? 
+                  <MenuItem onClick={logoutUser}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem> :
+                  <MenuItem
+                  to={'/register'}
+                  component={ReactLink}
+                  onClick={handleCloseUserMenu}
+                  >
+                    <Typography textAlign="center">Register</Typography>
+                  </MenuItem>
+              }
+              
+            </Menu>
+          </Box>
 
-                    </div>
-
-                    <div class="mobile-navigation-image col-5">
-                        <img src="logo.png" class="navigation-logo" alt=""/>
-                    </div>
-
-                    <div class="col">
-
-                    </div>
-
-                </div>
-            </section>
-
-        </div>
-    )
+        </Toolbar>
+      </Container>
+    </AppBar>
+    </ThemeProvider>
+  );
 }
-
-export default Header;
+export default ResponsiveAppBar;
