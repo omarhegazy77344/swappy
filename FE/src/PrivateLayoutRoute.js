@@ -5,13 +5,27 @@ import ResponsiveAppBar from "./LayoutComponents/Header";
 import Footer from "./LayoutComponents/Footer";
 import { UserContext } from './UserContext';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const theme = createTheme({
+    palette: {
+      primary: {
+        // Purple and green play nicely together.
+        main: '#00ADB5',
+      },
+      Secondary: {
+        // This is green.A700 as hex.
+        main: '#00897b',
+      },
+    },
+  });
 function LayoutRoute(props) {
 
     const {loggedIn} = useContext(UserContext);
 
     if (loggedIn) {
         return (
+            <ThemeProvider theme={theme}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -21,6 +35,7 @@ function LayoutRoute(props) {
                 <Route path={props.path} exact={props.exact} component={props.component} />
                 <Footer />
             </Box>
+            </ThemeProvider>
         )
     } else {
         return (

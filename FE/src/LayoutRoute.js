@@ -12,11 +12,11 @@ const theme = createTheme({
     palette: {
       primary: {
         // Purple and green play nicely together.
-        main: '#006064',
+        main: '#00ADB5',
       },
       Secondary: {
         // This is green.A700 as hex.
-        main: '#00897b',
+        main: '#00ADB5',
       },
     },
   });

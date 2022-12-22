@@ -9,7 +9,12 @@ router.post('/add',
         let newDocument ={
             "name": req.body.name,
             "price": req.body.price,
-            "picture":req.body.picture
+            "picture":req.body.picture,
+            "type":req.body.type,
+            "room":req.body.room,
+            "location":req.body.location,
+            "conditon":req.body.conditon,
+            "usage":req.body.usage,
         };
        
         ProductModel
@@ -119,7 +124,21 @@ router.put('/update',
         if (req.body.price) {
             updates['price'] = req.body.price;
         };
-           
+        if (req.body.type){ 
+            updates['type'] = req.body.type 
+        };
+        if (req.body.room) {
+            updates['room'] = req.body.room;
+        };  
+        if (req.body.location){ 
+            updates['location'] = req.body.location 
+        };
+        if (req.body.conditon) {
+            updates['conditon'] = req.body.conditon;
+        };
+        if (req.body.usage) {
+            updates['usage'] = req.body.usage;
+        };
         if( Object.values(req.files).length > 0 ) {
 
             const files = Object.values(req.files);

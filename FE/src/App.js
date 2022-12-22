@@ -9,6 +9,7 @@ import PrivateLayoutRoute from './PrivateLayoutRoute';
 import ProfileScreen from './ProfileScreen';
 import ProductsScreen from "./ProductsScreen";
 import UpdateProduct from "./UdateProduct";
+import Cart from "./Cart";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <PrivateLayoutRoute path="/sell" exact={true} component={AddProductScreen}/>
         <LayoutRoute path="/buy" exact={true} component={ProductsScreen}/>
         <LayoutRoute path="/pupdate" exact={true} component={UpdateProduct}/>
+        <LayoutRoute path="/cart" exact={true} component={Cart}/>
       </Switch>
     </BrowserRouter>
   );

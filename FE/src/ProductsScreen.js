@@ -11,26 +11,19 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ProductCard from "./ProductCard";
 
 
 
 
 
-const theme = createTheme({
-    palette: {
-      primary: {
-        // Purple and green play nicely together.
-        main: '#006064',
-      },
-      Secondary: {
-        // This is green.A700 as hex.
-        main: '#00897b',
-      },
-    },
-  });
 
 
+  function createProductCard(products){
+    return(
+        <ProductCard name={products.name} price={products.price} location={products.location} img={products.picture} />
+    )
+}
 
   var findData = new FormData();
   findData.append('null', null);
@@ -44,7 +37,7 @@ function ProductsScreen() {
 
   var [formState, setFormState] = useState(null);
   var [errorsState, setErrorsState] = useState([]);
-  const [userDetails, setUserDetails]  = useState();
+  const [productDetails, setproductDetails]  = useState();
 
   var data;
   
@@ -74,7 +67,7 @@ function ProductsScreen() {
         )
         .then(
             function(jsonResponse){
-                setUserDetails(jsonResponse);
+                setproductDetails(jsonResponse);
             }
         )
         .catch(
@@ -86,103 +79,113 @@ function ProductsScreen() {
     []
   );
 
-data=userDetails;
+data=productDetails;
 
 
   return (
 
+  <section>
+      
+      <div className="bg-dark text-light text-center padding-y-4">
+          <h1>Product Listing</h1>
+      </div>
 
-    <ThemeProvider theme={theme}>
-    <CssBaseline />
+      <div className="col-lg-10 col-10 col-md-10 row mx-auto margin-y-1">
+          {productDetails?.map(createProductCard)}
+      </div>
+      
+  </section>
+    // <ThemeProvider theme={theme}>
+    // <CssBaseline />
     
-    <main>
-      {/* Hero unit */}
-      <Box
-        sx={{
-          bgcolor: 'background.paper',
-          pt: 8,
-          pb: 6,
-        }}
-      >
-        <Container maxWidth="sm">
-          <Typography
-            component="h1"
-            variant="h2"
-            align="center"
-            color="text.primary"
-            gutterBottom
-          >
-            Album layout
-          </Typography>
-          <Typography variant="h5" align="center" color="text.secondary" paragraph>
-            Something short and leading about the collection below—its contents,
-            the creator, etc. Make it short and sweet, but not too short so folks
-            don&apos;t simply skip over it entirely.
-          </Typography>
-          <Stack
-            sx={{ pt: 4 }}
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-          >
-            <Button variant="contained">Main call to action</Button>
-            <Button variant="outlined">Secondary action</Button>
-          </Stack>
-        </Container>
-      </Box>
-      {/* End hero unit */}
+    // <main>
+    //   {/* Hero unit */}
+    //   <Box
+    //     sx={{
+    //       bgcolor: 'background.paper',
+    //       pt: 8,
+    //       pb: 6,
+    //     }}
+    //   >
+    //     <Container maxWidth="sm">
+    //       <Typography
+    //         component="h1"
+    //         variant="h2"
+    //         align="center"
+    //         color="text.primary"
+    //         gutterBottom
+    //       >
+    //         Album layout
+    //       </Typography>
+    //       <Typography variant="h5" align="center" color="text.secondary" paragraph>
+    //         Something short and leading about the collection below—its contents,
+    //         the creator, etc. Make it short and sweet, but not too short so folks
+    //         don&apos;t simply skip over it entirely.
+    //       </Typography>
+    //       <Stack
+    //         sx={{ pt: 4 }}
+    //         direction="row"
+    //         spacing={2}
+    //         justifyContent="center"
+    //       >
+    //         <Button variant="contained">Main call to action</Button>
+    //         <Button variant="outlined">Secondary action</Button>
+    //       </Stack>
+    //     </Container>
+    //   </Box>
+    //   {/* End hero unit */}
 
-      <Container sx={{ py: 8 }} maxWidth="md">
+    //   <Container sx={{ py: 8 }} maxWidth="md">
         
 
 
   
-      <Grid container spacing={4}>
-          {data?.map((product,i) => (
-            <Grid item key={i} xs={12} sm={6} md={4}>
+    //   <Grid container spacing={4}>
+    //       {data?.map((product,i) => (
+    //         <Grid item key={i} xs={12} sm={6} md={4}>
               
             
           
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    //         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
            
             
-            <CardMedia
-            component="img"
-            sx={{
-              // 16:9
-              pt: '56.25%',
-            }}
-            image={product.picture}
-            alt="random"
-            />
+    //         <CardMedia
+    //         component="img"
+    //         sx={{
+    //           // 16:9
+    //           pt: '56.25%',
+    //         }}
+    //         image={product.picture}
+    //         alt="random"
+    //         />
 
-                      <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                      {product.name}
-                      </Typography>
-                      <Typography>
-                      {product.price}
-                      </Typography>
-                      </CardContent>
-              <CardActions>
-              <Box sx={{ opacity: [0, 0, 0],}}> {}</Box>
-                <Button
-                to={'/pupdate'}
-                component={ReactLink}
-                size="small" >Edit</Button>
+    //                   <CardContent sx={{ flexGrow: 1 }}>
+    //                   <Typography gutterBottom variant="h5" component="h2">
+    //                   {product.name}
+    //                   </Typography>
+    //                   <Typography>
+    //                   {product.price}
+    //                   </Typography>
+    //                   </CardContent>
+    //           <CardActions>
+    //           <Box sx={{ opacity: [0, 0, 0],}}> {}</Box>
+    //             <Button
+    //             to={'/pupdate'}
+    //             component={ReactLink}
+    //             size="small" >Edit</Button>
                 
-              </CardActions>
-            </Card>
-          </Grid>
-          ))}
-        </Grid>
+    //           </CardActions>
+    //         </Card>
+    //       </Grid>
+    //       ))}
+    //     </Grid>
 
 
 
-      </Container>
-    </main> 
+    //   </Container>
+    // </main> 
 
-    </ThemeProvider>
+    // </ThemeProvider>
 );
 
 }

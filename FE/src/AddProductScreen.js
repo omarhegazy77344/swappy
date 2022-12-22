@@ -22,6 +22,12 @@ function AddProductScreen() {
     var nameField;
     var priceField;
     var pictureField;
+    var typeField;
+    var roomField;
+    var conditionField;
+    var locationField;
+    var usageField;
+
 
      
     // Create a JS object like an HTML form element 
@@ -54,6 +60,27 @@ function AddProductScreen() {
             errors.push('Please enter product price');
         }
 
+        if(typeField.value.length === 0) {
+            errors.push('Please enter product name');
+        }
+
+        if(roomField.value.length === 0) {
+            errors.push('Please enter product price');
+        }
+        if(locationField.value.length === 0) {
+            errors.push('Please enter product name');
+        }
+
+        if(usageField.value.length === 0) {
+            errors.push('Please enter product price');
+        }
+
+        if(conditionField.value.length === 0) {
+            errors.push('Please enter product price');
+        }
+        
+
+
         // 3. If any field is not validated, go to "client error"
         if( errors.length > 0 ) {
             setFormState("client error");
@@ -69,6 +96,11 @@ function AddProductScreen() {
             // 6. Send data backend
             formData.append('name', nameField.value);
             formData.append('price', priceField.value);
+            formData.append('type', typeField.value);
+            formData.append('room', roomField.value);
+            formData.append('location', locationField.value);
+            formData.append('usage', usageField.value);
+            formData.append('condition', conditionField.value);
 
             fetch(
                 `${process.env.REACT_APP_BACKEND_ENDPOINT}/products/add`,
@@ -103,7 +135,7 @@ function AddProductScreen() {
                     setFormState("backend error");
                 }
             )
-        }
+        } 
     }
 
     function addListItem(str) {
@@ -133,12 +165,65 @@ function AddProductScreen() {
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   
                   <TextField 
+                   type="number"
                    inputRef={ 
                         function( thisElement ){
                             priceField = thisElement;
                         } 
                     }
                    label="Price" required={true}/>
+                </FormControl>
+
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                <TextField 
+                   type="String"
+                   inputRef={ 
+                        function( thisElement ){
+                            typeField = thisElement;
+                        } 
+                    }
+                   label="Type" required={true}/>
+                </FormControl>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                <TextField 
+                   type="String"
+                   inputRef={ 
+                        function( thisElement ){
+                            roomField = thisElement;
+                        } 
+                    }
+                   label="Room" required={true}/>
+                </FormControl>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                <TextField 
+                   type="String"
+                   inputRef={ 
+                        function( thisElement ){
+                            locationField = thisElement;
+                        } 
+                    }
+                   label="Location" required={true}/>
+
+                </FormControl>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                <TextField 
+                   type="String"
+                   inputRef={ 
+                        function( thisElement ){
+                            conditionField = thisElement;
+                        } 
+                    }
+                   label="Condition" required={true}/>
+                </FormControl>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                <TextField 
+                   type="String"
+                   inputRef={ 
+                        function( thisElement ){
+                            usageField = thisElement;
+                        } 
+                    }
+                   label="Usage" required={true}/>
                 </FormControl>
             </Box>
             

@@ -9,7 +9,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 
-
 function RegistrationScreen() {
 
     // The states are: 

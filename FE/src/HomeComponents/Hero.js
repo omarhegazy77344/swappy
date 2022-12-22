@@ -1,3 +1,4 @@
+import {Link as ReactLink} from 'react-router-dom';
 function Hero(){
 
     let heroStyle = {
@@ -22,12 +23,12 @@ function Hero(){
     return(
         <section className="slideshow mx-auto my-3" style={heroStyle}>
             <div class="col-10 mx-auto">
-                <div class="margin-bottom-2" style={contentStyle}>
-                    <h2 class="text-light"><strong>Buy & Sell Used Furniture</strong></h2>
-                    <p class="text-light">The only online marketplace where you can buy, sell and deliver your furniture hassle-free.</p>
+            <div class="margin-bottom-2" style={contentStyle}>
+                    <h1 class="text-light"><strong>Make your home pretty yet comfortable</strong></h1>
+                    <p class="text-light font-16">Don't get carried away with making your home look good. Make it feel good.</p>
                 </div>
-                <button class="btn btn-primary" style={btnStyle}>Buy Furniture</button>
-                <button class="btn btn-primary-outline ms-2" style={btnStyle}>Sell Furniture</button>
+                <ReactLink to={'/buy'}>  <button class="btn btn-primary" style={btnStyle}>Buy Furniture</button></ReactLink>
+                <ReactLink to={'/sell'}>  <button class="btn btn-primary-outline ms-2" style={btnStyle}>Sell Furniture</button></ReactLink>
             </div>
         </section>
     )
