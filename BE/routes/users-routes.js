@@ -290,7 +290,7 @@ router.post('/find',
 // http://localhost:3001/users/update
 router.put('/update',
     passport.authenticate('jwt', {session: false}),
-    function(req, res) {
+    async   function(req, res) {
 
         let updates = {}
 
@@ -300,11 +300,32 @@ router.put('/update',
         if (req.body.lastName) {
             updates['lastName'] = req.body.lastName;
         };
-        
-       
+           
+        if( Object.values(req.files).length > 0 ) {
 
+            const files = Object.values(req.files);
+            
+            
+            // upload to Cloudinary
+            await cloudinary.uploader.upload(
+                files[0].path,
+                (cloudinaryErr, cloudinaryResult) => {
+                    if(cloudinaryErr) {
+                        console.log(cloudinaryErr);
+                        res.json(
+                            {
+                                status: "not ok",
+                                message: "Error occured during image upload"
+                            }
+                        )
+                    } else {
+                        // Include the image url in formData
+                        updates['avatar'] = cloudinaryResult.url;
+                    }
+                }
+            )
+        };
         
-
         UserModel
         .findOneAndUpdate(
             {

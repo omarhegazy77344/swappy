@@ -107,4 +107,98 @@ router.post( '/find',
 
 );
 
+
+router.put('/update',
+    async   function(req, res) {
+
+        let updates = {}
+
+        if (req.body.name){ 
+            updates['name'] = req.body.name 
+        };
+        if (req.body.price) {
+            updates['price'] = req.body.price;
+        };
+           
+        if( Object.values(req.files).length > 0 ) {
+
+            const files = Object.values(req.files);
+            
+            
+            // upload to Cloudinary
+            await cloudinary.uploader.upload(
+                files[0].path,
+                (cloudinaryErr, cloudinaryResult) => {
+                    if(cloudinaryErr) {
+                        console.log(cloudinaryErr);
+                        res.json(
+                            {
+                                status: "not ok",
+                                message: "Error occured during image upload"
+                            }
+                        )
+                    } else {
+                        // Include the image url in formData
+                        updates['picture'] = cloudinaryResult.url;
+                    }
+                }
+            )
+        };
+    
+       
+
+        
+
+        ProductModel
+        .findOneAndUpdate(
+            {
+                "_id": req.body._id
+            },
+            {
+                $set: updates
+            },
+            {
+                new: true
+            }
+        )
+        .then(
+           
+            function(dbDocument) {
+            
+                res.json(dbDocument)
+
+            }
+        )
+        .catch(
+            function(error) {
+                console.log('/users/update error', error);
+                res.send('An error occured');
+            }
+        )
+
+    }
+);
+
+router.post('/findone',
+    //passport.authenticate('jwt', {session: false}),
+    function(req, res) {
+        ProductModel
+       .findById(req.body._id)
+      // .find(req.user)
+        .then(
+            function(dbDocument) {
+                res.json(dbDocument)
+            }
+        )
+        .catch(
+            function(error) {
+
+                console.log('/find error', error);
+
+                res.send('An error occured');
+
+            }
+        )
+    }
+);
 module.exports=router;

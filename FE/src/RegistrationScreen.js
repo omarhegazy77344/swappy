@@ -42,12 +42,6 @@ function RegistrationScreen() {
         )
     }
 
-
-
-
-
-
-
     function register() {
 
 
@@ -123,15 +117,6 @@ function RegistrationScreen() {
             )
         }
     }
-
-
-
-
-
-
-
-
-
 
     function addListItem(str) {
         return <li>{str}</li>

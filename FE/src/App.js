@@ -7,7 +7,8 @@ import AddProductScreen from "./AddProductScreen";
 import GuestLayoutRoute from './GuestLayoutRoute';
 import PrivateLayoutRoute from './PrivateLayoutRoute';
 import ProfileScreen from './ProfileScreen';
-import Album from "./ProductsScreen";
+import ProductsScreen from "./ProductsScreen";
+import UpdateProduct from "./UdateProduct";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
         <GuestLayoutRoute path="/register" exact={true} component={RegistrationScreen} />
         <GuestLayoutRoute path="/login" exact={true} component={LoginScreen} />
         <PrivateLayoutRoute path="/sell" exact={true} component={AddProductScreen}/>
-        <LayoutRoute path="/products" exact={true} component={Album}/>
+        <LayoutRoute path="/buy" exact={true} component={ProductsScreen}/>
+        <LayoutRoute path="/pupdate" exact={true} component={UpdateProduct}/>
       </Switch>
     </BrowserRouter>
   );
